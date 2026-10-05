@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ========================================================= -->
+        <!-- WIZARD FORM VIEW                                          -->
+        <!-- ========================================================= -->
+        <record id="view_inventory_aging_report_wizard_form" model="ir.ui.view">
+            <field name="name">inventory.aging.report.wizard.form</field>
+            <field name="model">inventory.aging.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Inventory Aging and Valuation Report">
+                    <sheet>
+                        <group>
+                            <group string="REPORT SETTINGS">
+                                <field name="aging_date"/>
+                                <field name="period_length"/>
+                                <field name="company_id" options="{'no_create': True}"/>
+                            </group>
+                            <group string="LOCATION FILTERS">
+                                <field name="warehouse_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="location_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <group string="PRODUCT FILTERS">
+                            <group>
+                                <field name="filter_by"/>
+                            </group>
+                            <group>
+                                <field name="product_ids" widget="many2many_tags" options="{'no_create': True}" invisible="filter_by != 'product'"/>
+                                <field name="category_ids" widget="many2many_tags" options="{'no_create': True}" invisible="filter_by != 'category'"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_view_report" string="View Report" type="object" class="btn-primary" icon="fa-table"/>
+                        <button name="action_print_pdf" string="Print PDF" type="object" class="btn-secondary" icon="fa-file-pdf-o"/>
+                        <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary" icon="fa-file-excel-o"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Window Action for Wizard -->
+        <record id="action_inventory_aging_report_wizard" model="ir.actions.act_window">
+            <field name="name">Inventory Aging and Valuation Report</field>
+            <field name="res_model">inventory.aging.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menu Item in Reporting menu -->
+        <menuitem id="menu_inventory_aging_report"
+                  name="Inventory Aging and Valuation Report"
+                  parent="stock.menu_warehouse_report"
+                  action="action_inventory_aging_report_wizard"
+                  sequence="100"/>
+
+        <!-- ========================================================= -->
+        <!-- REPORT LINES: LIST, PIVOT, GRAPH, SEARCH VIEWS           -->
+        <!-- ========================================================= -->
+
+        <!-- List View for Report Lines -->
+        <record id="view_inventory_aging_report_line_list" model="ir.ui.view">
+            <field name="name">inventory.aging.report.line.list</field>
+            <field name="model">inventory.aging.report.line</field>
+            <field name="arch" type="xml">
+                <list string="Inventory Aging and Valuation Report" create="false" edit="false" delete="false">
+                    <header>
+                        <button name="action_refresh_report" string="Refresh Data" type="object" class="btn-primary" icon="fa-refresh"/>
+                        <button name="action_print_pdf" string="Print PDF" type="object" class="btn-secondary" icon="fa-file-pdf-o"/>
+                        <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary" icon="fa-file-excel-o"/>
+                    </header>
+                    <field name="default_code" string="Internal Reference"/>
+                    <field name="product_id"/>
+                    <field name="categ_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="unit_cost" widget="monetary" options="{'currency_field': 'company_id'}"/>
+                    <field name="total_qty" string="Total On-Hand Qty" sum="Grand Total Qty" class="fw-bold"/>
+                    <field name="total_val" string="Total Value" sum="Grand Total Value" widget="monetary" class="fw-bold"/>
+                    <field name="bracket_1_price" widget="monetary" options="{'currency_field': 'company_id'}" optional="show"/>
+                    <field name="bracket_1_qty" sum="Total"/>
+                    <field name="bracket_1_val" sum="Total" widget="monetary"/>
+                    <field name="bracket_2_price" widget="monetary" options="{'currency_field': 'company_id'}" optional="show"/>
+                    <field name="bracket_2_qty" sum="Total"/>
+                    <field name="bracket_2_val" sum="Total" widget="monetary"/>
+                    <field name="bracket_3_price" widget="monetary" options="{'currency_field': 'company_id'}" optional="show"/>
+                    <field name="bracket_3_qty" sum="Total"/>
+                    <field name="bracket_3_val" sum="Total" widget="monetary"/>
+                    <field name="bracket_4_price" widget="monetary" options="{'currency_field': 'company_id'}" optional="show"/>
+                    <field name="bracket_4_qty" sum="Total"/>
+                    <field name="bracket_4_val" sum="Total" widget="monetary"/>
+                    <field name="bracket_5_price" widget="monetary" options="{'currency_field': 'company_id'}" optional="show"/>
+                    <field name="bracket_5_qty" sum="Total"/>
+                    <field name="bracket_5_val" sum="Total" widget="monetary"/>
+                    <field name="company_id" column_invisible="True"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Pivot View for Report Lines -->
+        <record id="view_inventory_aging_report_line_pivot" model="ir.ui.view">
+            <field name="name">inventory.aging.report.line.pivot</field>
+            <field name="model">inventory.aging.report.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Inventory Aging and Valuation Report" display_quantity="false">
+                    <field name="company_id" type="row"/>
+                    <field name="categ_id" type="row"/>
+                    <field name="product_id" type="row"/>
+                    <field name="bracket_1_qty" type="measure"/>
+                    <field name="bracket_2_qty" type="measure"/>
+                    <field name="bracket_3_qty" type="measure"/>
+                    <field name="bracket_4_qty" type="measure"/>
+                    <field name="bracket_5_qty" type="measure"/>
+                    <field name="total_qty" type="measure"/>
+                    <field name="total_val" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Graph View for Report Lines -->
+        <record id="view_inventory_aging_report_line_graph" model="ir.ui.view">
+            <field name="name">inventory.aging.report.line.graph</field>
+            <field name="model">inventory.aging.report.line</field>
+            <field name="arch" type="xml">
+                <graph string="Inventory Aging and Valuation Report" type="bar" sample="1">
+                    <field name="categ_id"/>
+                    <field name="total_val" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Search View for Report Lines -->
+        <record id="view_inventory_aging_report_line_search" model="ir.ui.view">
+            <field name="name">inventory.aging.report.line.search</field>
+            <field name="model">inventory.aging.report.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Inventory Aging and Valuation Report">
+                    <field name="product_id"/>
+                    <field name="default_code"/>
+                    <field name="categ_id"/>
+                    <field name="warehouse_id"/>
+                    <filter string="In Stock" name="has_stock" domain="[('total_qty', '&gt;', 0)]"/>
+                    <filter string="Oldest Stock" name="oldest_stock" domain="[('bracket_5_qty', '&gt;', 0)]"/>
+                    <separator/>
+                    <group name="group_by">
+                        <filter string="Category" name="group_by_categ" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Warehouse" name="group_by_warehouse" context="{'group_by': 'warehouse_id'}"/>
+                        <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                        <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Report Lines (View on Screen) -->
+        <record id="action_inventory_aging_report_line" model="ir.actions.act_window">
+            <field name="name">Inventory Aging and Valuation Report</field>
+            <field name="res_model">inventory.aging.report.line</field>
+            <field name="view_mode">list,pivot,graph</field>
+            <field name="view_id" ref="view_inventory_aging_report_line_list"/>
+            <field name="search_view_id" ref="view_inventory_aging_report_line_search"/>
+            <field name="context">{'search_default_group_by_categ': 1, 'search_default_has_stock': 1}</field>
+        </record>
+
+        <!-- Action Gear Menu Item: Print PDF Report -->
+        <record id="action_print_pdf_from_report_line" model="ir.actions.server">
+            <field name="name">Print PDF Report</field>
+            <field name="model_id" ref="model_inventory_aging_report_line"/>
+            <field name="binding_model_id" ref="model_inventory_aging_report_line"/>
+            <field name="binding_view_types">list,pivot,graph</field>
+            <field name="state">code</field>
+            <field name="code">
+action = records.action_print_pdf()
+            </field>
+        </record>
+
+        <!-- Action Gear Menu Item: Export Excel Report -->
+        <record id="action_export_excel_from_report_line" model="ir.actions.server">
+            <field name="name">Export Excel Report</field>
+            <field name="model_id" ref="model_inventory_aging_report_line"/>
+            <field name="binding_model_id" ref="model_inventory_aging_report_line"/>
+            <field name="binding_view_types">list,pivot,graph</field>
+            <field name="state">code</field>
+            <field name="code">
+action = records.action_export_excel()
+            </field>
+        </record>
+
+    </data>
+</odoo>

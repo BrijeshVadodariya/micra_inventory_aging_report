@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Inventory Aging and Valuation Report - Odoo 17,18,19,20</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin:0; padding:0; background-color:#ffffff; font-family:'Segoe UI', Arial, sans-serif; color:#1f1f1f;">
+    <div class="container py-4 py-lg-5" style="max-width:1320px;">
+        <!-- MAIN HEADER -->
+        <section class="mb-4 mb-lg-5"
+            style="border:1px solid #f3dbe0; border-radius:28px; padding:36px 24px; background:linear-gradient(180deg,#ffffff 0%,#fff9fb 100%); box-shadow:0 14px 35px rgba(232,83,101,0.06);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <div
+                        style="display:inline-block; background-color:#fff4f6; color:#e85365; border:1px solid #f2d6dc; border-radius:50px; padding:8px 14px; font-size:13px; font-weight:700; letter-spacing:0.4px; margin-bottom:18px;">
+                        MICRA DIGITAL
+                    </div>
+                    <h1
+                        style="margin:0 0 16px 0; font-size:35px; line-height:1.2; font-weight:550; color:#111111; font-family:'Kalam', cursive;">
+                        <span
+                            style="display:inline-block; padding:0 5px 3px 5px; margin-right:4px; border-bottom:5px solid #E01E5A;">Inventory</span>
+                        <span
+                            style="display:inline-block; padding:0 5px 3px 5px; margin-right:4px; border-bottom:5px solid #36C5F0;">Aging</span>
+                        <span style="display:inline-block; padding:0 5px 3px 5px; border-bottom:5px solid #2EB67D;">&amp;
+                            Valuation</span>
+                    </h1>
+                    <p style="margin:0; font-size:17px; line-height:1.9; color:#666666;">
+                        Accurate FIFO Stock Aging Analysis &amp; Inventory Valuation with dynamic aging brackets,
+                        multi-warehouse &amp; location filtering, interactive List/Pivot/Graph views, executive QWeb PDF,
+                        and formatted Excel (.xlsx) export.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <div style="padding:22px; text-align:center;">
+                        <div
+                            style="width:78px; height:78px; line-height:78px; margin:0 auto 45px 120px; color:#714bb2; font-size:56px; font-weight:700;">
+                            <img alt="Icon" src="icon.png" style="width:160%; height:160%; object-fit:contain;">
+                        </div>
+                        <h3 style="margin:0 0 8px 0; font-size:22px; font-weight:700; color:#1f1f1f;">
+                            Stock &amp; Valuation Analytics
+                        </h3>
+                        <p style="margin:0 0 16px 0; font-size:15px; line-height:1.8; color:#666666;">
+                            Professional stock aging engine designed for businesses to track slow-moving inventory,
+                            holding costs, and true FIFO valuation directly in Odoo.
+                        </p>
+                        <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:8px;">
+                            <span
+                                style="background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:700;">
+                                <i class="fa fa-calendar" style="margin-right:5px;"></i>Dynamic Brackets
+                            </span>
+                            <span
+                                style="background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:700;">
+                                <i class="fa fa-file-excel-o" style="margin-right:5px;"></i>Excel &amp; PDF Export
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOP CENTER TABS -->
+        <section class="mb-5" style="margin-bottom:3.5rem !important;">
+            <ul class="nav nav-tabs justify-content-center align-items-end border-0" role="tablist"
+                style="text-align:center; gap:0; border-bottom:1px solid #dfe7eb; --bs-nav-tabs-border-width:1px; --bs-nav-tabs-border-color:#dfe7eb; --bs-nav-tabs-border-radius:18px; --bs-nav-tabs-link-hover-border-color:#dfe7eb #dfe7eb #dfe7eb; --bs-nav-tabs-link-active-color:#e85365; --bs-nav-tabs-link-active-bg:#ffffff; --bs-nav-tabs-link-active-border-color:#dfe7eb #dfe7eb #ffffff; --bs-nav-link-color:#5b9ab0; --bs-nav-link-hover-color:#e85365;">
+                <li class="nav-item" role="presentation" style="margin:0 0 -1px 0;">
+                    <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview-pane" role="tab"
+                        aria-controls="overview-pane" aria-selected="true"
+                        style="min-width:190px; font-size:17px; font-weight:700; padding:16px 34px; border-radius:18px 18px 0 0; margin:0;">
+                        Description
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation" style="margin:0 0 -1px 8px;">
+                    <a class="nav-link" id="screenshot-tab" data-bs-toggle="tab" href="#screenshot-pane" role="tab"
+                        aria-controls="screenshot-pane" aria-selected="false"
+                        style="min-width:190px; font-size:17px; font-weight:700; padding:16px 34px; border-radius:18px 18px 0 0; margin:0;">
+                        Screenshot
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <div class="tab-content">
+            <!-- OVERVIEW TAB -->
+            <div aria-labelledby="overview-tab" class="tab-pane fade show active" id="overview-pane" role="tabpanel">
+                <!-- CONTACT US -->
+                <section class="mb-5">
+                    <div class="text-center mb-4">
+                        <h2
+                            style="margin:0 0 12px 0; font-size:36px; line-height:1; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 8px 7px 8px; margin-right:4px; border-bottom:2.5px solid #43d5cf;">
+                                Contact
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 8px 7px 8px; margin-right:4px; border-bottom:2.5px solid #ffba2f;">
+                                Our
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 8px 7px 8px; border-bottom:2.5px solid #f79ac0;">
+                                Team
+                            </span>
+                        </h2>
+                        <p style="margin:0 auto; max-width:760px; font-size:16px; line-height:1.9; color:#666666;">
+                            Contact Micra Digital instantly through WhatsApp, Email, or Phone.
+                        </p>
+                    </div>
+                    <div class="row g-4 justify-content-center">
+                        <!-- WHATSAPP CARD -->
+                        <div class="col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #f3e5f5; border-radius:22px; padding:32px 28px; background:#ffffff; box-shadow:0 8px 22px rgba(0,0,0,0.04); text-align:center;">
+                                <div style="font-size:54px; color:#25D366; margin-bottom:18px;">
+                                    <i class="fa fa-whatsapp"></i>
+                                </div>
+                                <div style="max-width:260px; margin:0 auto 22px auto;">
+                                    <img alt="WhatsApp QR" src="wha.png"
+                                        style="width:100%; height:auto; border-radius:16px;">
+                                </div>
+                                <a href="#"
+                                    style="display:inline-block; text-decoration:none; color:#ffffff; background:#25D366; padding:12px 26px; border-radius:30px; font-size:15px; font-weight:700;">
+                                    <i class="fa fa-whatsapp" style="margin-right:6px;"></i>
+                                    Open WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                        <!-- EMAIL CARD -->
+                        <div class="col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #ffe6e6; border-radius:22px; padding:32px 28px; background:#ffffff; box-shadow:0 8px 22px rgba(0,0,0,0.04); text-align:center;">
+                                <div style="font-size:50px; color:#EA4335; margin-bottom:18px;">
+                                    <i class="fa fa-envelope"></i>
+                                </div>
+                                <div style="max-width:260px; margin:0 auto 22px auto;">
+                                    <img alt="Email QR" src="Email.png"
+                                        style="width:100%; height:auto; border-radius:16px;">
+                                </div>
+                                <a href="mailto:hello@micra.digital"
+                                    style="display:inline-block; text-decoration:none; color:#ffffff; background:#EA4335; padding:12px 26px; border-radius:30px; font-size:15px; font-weight:700;">
+                                    <i class="fa fa-envelope" style="margin-right:6px;"></i>
+                                    Send Mail
+                                </a>
+                            </div>
+                        </div>
+                        <!-- PHONE CARD -->
+                        <div class="col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #e3ecff; border-radius:22px; padding:32px 28px; background:#ffffff; box-shadow:0 8px 22px rgba(0,0,0,0.04); text-align:center;">
+                                <div style="font-size:52px; color:#0d6efd; margin-bottom:18px;">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                                <div style="max-width:260px; margin:0 auto 22px auto;">
+                                    <img alt="Phone QR" src="call.png"
+                                        style="width:100%; height:auto; border-radius:16px;">
+                                </div>
+                                <a href="tel:+911234567890"
+                                    style="display:inline-block; text-decoration:none; color:#ffffff; background:#0d6efd; padding:12px 26px; border-radius:30px; font-size:15px; font-weight:700;">
+                                    <i class="fa fa-phone" style="margin-right:6px;"></i>
+                                    Call Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- INTRO SECTION -->
+                <section class="mb-5">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <h2
+                                style="margin:0 0 12px 0; font-size:36px; line-height:1.2; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                                <span
+                                    style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:2.5px solid #36C5F0;">Inventory</span>
+                                <span
+                                    style="display:inline-block; padding:0 10px 7px 10px; border-bottom:2.5px solid #2EB67D;">Aging &amp; Valuation</span>
+                            </h2>
+                            <p style="margin:0 0 14px 0; font-size:16px; line-height:1.9; color:#666666;">
+                                Excess and obsolete stock ties up working capital and inflates warehousing overheads. This
+                                module delivers actionable visibility into stock shelf life, aging distribution, and accurate
+                                FIFO-based valuation across your entire inventory.
+                            </p>
+                            <p style="margin:0; font-size:16px; line-height:1.9; color:#666666;">
+                                Evaluate current on-hand stock against historical incoming moves, break down quantities and
+                                costs into dynamic customizable brackets (e.g. 0-30, 31-60, 61-90, 91-120, 121+ days), and
+                                export executive-ready Excel &amp; PDF reports in seconds.
+                            </p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; padding:26px; text-align:center; background-color:#fffafb; box-shadow:0 10px 28px rgba(232,83,101,0.05);">
+                                <div style="margin:0 auto 16px auto; font-size:46px; color:#e85365;">
+                                    <i class="fa fa-calculator"></i>
+                                </div>
+                                <h4 style="margin:0 0 8px 0; font-size:22px; font-weight:700; color:#1f1f1f;">
+                                    Dynamic Aging Engine
+                                </h4>
+                                <p style="margin:0 0 16px 0; font-size:15px; line-height:1.8; color:#666666;">
+                                    Configure any period length in days. The engine dynamically calculates dynamic column
+                                    headers, category subtotals, and grand totals on the fly.
+                                </p>
+                                <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:8px;">
+                                    <span
+                                        style="background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:5px 14px; font-size:12px; font-weight:700;">
+                                        <i class="fa fa-database" style="margin-right:5px;"></i>FIFO Valuation
+                                    </span>
+                                    <span
+                                        style="background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:5px 14px; font-size:12px; font-weight:700;">
+                                        <i class="fa fa-refresh" style="margin-right:5px;"></i>Live Recalculation
+                                    </span>
+                                    <span
+                                        style="background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:5px 14px; font-size:12px; font-weight:700;">
+                                        <i class="fa fa-bolt" style="margin-right:5px;"></i>Zero Lag
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HIGHLIGHT SECTION -->
+                <section class="mb-5">
+                    <div class="row g-4">
+                        <!-- CARD 1 -->
+                        <div class="col-md-6">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:24px; padding:32px 24px; background:linear-gradient(180deg,#fffafb 0%,#ffffff 100%); box-shadow:0 10px 24px rgba(232,83,101,0.05); text-align:center;">
+                                <div style="margin:0 auto 14px auto; font-size:40px; color:#e85365;">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </div>
+                                <h2
+                                    style="margin:0 0 12px 0; font-size:26px; line-height:1.25; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; margin-right:4px; border-bottom:2.5px solid #E01E5A;">Dynamic</span>
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; margin-right:4px; border-bottom:2.5px solid #2EB67D;">Aging</span>
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; border-bottom:2.5px solid #36C5F0;">Brackets</span>
+                                </h2>
+                                <p style="margin:0 auto 20px auto; font-size:15px; line-height:1.9; color:#666666;">
+                                    Break down inventory into 5 dynamic age intervals (e.g. 0-30, 31-60, 61-90, 91-120, 121+ Days)
+                                    with detailed Price, Quantity, and Valuation breakdown per interval.
+                                </p>
+                                <div
+                                    style="display:inline-block; background:#fff4f6; color:#e85365; border:1px solid #f2d6dc; border-radius:50px; padding:10px 18px; font-size:13px; font-weight:700;">
+                                    <i class="fa fa-clock-o" style="margin-right:8px;"></i>
+                                    Configurable Period Length
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CARD 2 -->
+                        <div class="col-md-6">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:24px; padding:32px 24px; background:linear-gradient(180deg,#fffafb 0%,#ffffff 100%); box-shadow:0 10px 24px rgba(232,83,101,0.05); text-align:center;">
+                                <div style="margin:0 auto 14px auto; font-size:40px; color:#e85365;">
+                                    <i class="fa fa-building-o"></i>
+                                </div>
+                                <h2
+                                    style="margin:0 0 12px 0; font-size:26px; line-height:1.25; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; margin-right:4px; border-bottom:2.5px solid #E01E5A;">Multi-Warehouse</span>
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; margin-right:4px; border-bottom:2.5px solid #2EB67D;">&amp;</span>
+                                    <span
+                                        style="display:inline-block; padding:0 8px 6px 8px; border-bottom:2.5px solid #36C5F0;">Locations</span>
+                                </h2>
+                                <p style="margin:0 auto 20px auto; font-size:15px; line-height:1.9; color:#666666;">
+                                    Filter and analyze stock across multiple companies, specific warehouses, or individual
+                                    internal storage locations (including recursive child locations) with ease.
+                                </p>
+                                <div
+                                    style="display:inline-block; background:#fff4f6; color:#e85365; border:1px solid #f2d6dc; border-radius:50px; padding:10px 18px; font-size:13px; font-weight:700;">
+                                    <i class="fa fa-sitemap" style="margin-right:8px;"></i>
+                                    Multi-Location Scope
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HOW IT WORKS -->
+                <section class="mb-5">
+                    <div class="text-center mb-4">
+                        <h2
+                            style="margin:0 0 10px 0; font-size:36px; line-height:1.2; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:2.5px solid #43d5cf;">
+                                How
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:2.5px solid #ffb733;">
+                                It
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; border-bottom:2.5px solid #f79ac0;">
+                                Works
+                            </span>
+                        </h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:28px 24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05); text-align:center;">
+                                <div style="font-size:34px; color:#e85365; margin-bottom:14px;">
+                                    <i class="fa fa-sliders"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">1. Configure Wizard</h4>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    Open the wizard from the Inventory Reporting menu. Set aging cut-off date, period interval
+                                    (e.g., 30 Days), company, warehouses, and filter by products or categories.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:28px 24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05); text-align:center;">
+                                <div style="font-size:34px; color:#e85365; margin-bottom:14px;">
+                                    <i class="fa fa-table"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">2. Interactive Analytics</h4>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    Instantly view calculated stock lines in dynamic List, Pivot, and Graph views. Group by
+                                    categories, inspect subtotals, and slice stock data seamlessly.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:28px 24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05); text-align:center;">
+                                <div style="font-size:34px; color:#e85365; margin-bottom:14px;">
+                                    <i class="fa fa-download"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">3. Export &amp; Share</h4>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    Generate executive Landscape QWeb PDF reports with executive KPI cards or download formatted
+                                    Excel (.xlsx) spreadsheets with a single click.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FEATURES -->
+                <section class="mb-5">
+                    <div class="text-center mb-4">
+                        <h2
+                            style="margin:0 0 10px 0; font-size:36px; line-height:1.42; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:2.5px solid #E01E5A;">
+                                App
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:2.5px solid #2EB67D;">
+                                Key
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; border-bottom:2.5px solid #36C5F0;">
+                                Features
+                            </span>
+                        </h2>
+                        <p style="margin:0; font-size:16px; line-height:1.8; color:#666666;">
+                            Everything you need to track stock aging, eliminate dead stock, and audit inventory valuation.
+                        </p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div
+                                style="height:100%; border:2px solid #e85365; border-radius:22px; padding:24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.1);">
+                                <div style="font-size:28px; color:#e85365; margin-bottom:14px;">
+                                    <i class="fa fa-cubes"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">
+                                    True FIFO Costing
+                                </h4>
+                                <p style="margin:0 0 14px 0; font-size:15px; line-height:1.9; color:#666666;">
+                                    <strong>Layer Valuation:</strong> Evaluates on-hand stock against historical incoming stock moves (newest to oldest) to compute accurate unit costs and bracket values.
+                                </p>
+                                <span
+                                    style="display:inline-block; background:#fff4f6; border:1px solid #f2d6dc; color:#e85365; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:700;">
+                                    <i class="fa fa-check" style="margin-right:5px;"></i>FIFO Logic
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div
+                                style="height:100%; border:2px solid #36C5F0; border-radius:22px; padding:24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(54,197,240,0.1);">
+                                <div style="font-size:28px; color:#36C5F0; margin-bottom:14px;">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">
+                                    Dynamic Aging Brackets
+                                </h4>
+                                <p style="margin:0 0 14px 0; font-size:15px; line-height:1.9; color:#666666;">
+                                    <strong>Custom Intervals:</strong> Choose any period length (e.g. 15, 30, 60 days) to auto-generate 5 dynamic brackets with Price, Qty, and Value metrics.
+                                </p>
+                                <span
+                                    style="display:inline-block; background:#f0faff; border:1px solid #cceeff; color:#36C5F0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:700;">
+                                    5-Interval Steps
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05);">
+                                <div style="font-size:28px; color:#2EB67D; margin-bottom:14px;">
+                                    <i class="fa fa-bar-chart"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">
+                                    List, Pivot &amp; Graph
+                                </h4>
+                                <p style="margin:0 0 14px 0; font-size:15px; line-height:1.9; color:#666666;">
+                                    <strong>Multi-View UI:</strong> Interactive on-screen List view with category grouping, Pivot matrix analysis, and visual aging distribution graphs.
+                                </p>
+                                <span
+                                    style="display:inline-block; background:#e8f5e9; border:1px solid #c8e6c9; color:#2EB67D; border-radius:30px; padding:6px 12px; font-size:12px; font-weight:700;">
+                                    Interactive Views
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:24px; background-color:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05);">
+                                <div style="font-size:28px; color:#36C5F0; margin-bottom:14px;">
+                                    <i class="fa fa-file-excel-o"></i>
+                                </div>
+                                <h4 style="margin:0 0 10px 0; font-size:21px; font-weight:700; color:#1f1f1f;">
+                                    Excel &amp; PDF Export
+                                </h4>
+                                <p style="margin:0 0 14px 0; font-size:15px; line-height:1.9; color:#666666;">
+                                    <strong>Executive Reports:</strong> Branded formatted Excel (.xlsx) export with category subtotals and executive Landscape QWeb PDF with KPI summary cards.
+                                </p>
+                                <span
+                                    style="display:inline-block; background:#f0faff; border:1px solid #cceeff; color:#36C5F0; border-radius:30px; padding:6px 12px; font-size:12px; font-weight:700;">
+                                    PDF &amp; Excel
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TECH DETAILS -->
+                <section class="mb-5">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:28px 24px; background:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05);">
+                                <h3
+                                    style="margin:0 0 18px 0; font-size:28px; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                                    Module Highlights
+                                </h3>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-check-circle" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>True FIFO Valuation</b>: Traces incoming stock moves chronologically to allocate actual acquisition costs and calculate real stock aging.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-columns" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Dynamic View Architecture</b>: Generates custom List and Pivot views per period length on the fly, eliminating Odoo view caching conflicts.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-shopping-cart" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>PO Price &amp; Growth Tracking</b>: Adds Previous Price and Growth (%) tracking directly on Purchase Order lines for proactive procurement cost control.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px;">
+                                    <i class="fa fa-bolt" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Optimized Transient Storage</b>: Fast memory computations with automatic transient cleanup ensuring zero bloat in your database.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div
+                                style="height:100%; border:1px solid #f2d6dc; border-radius:22px; padding:28px 24px; background:#fffafb; box-shadow:0 10px 25px rgba(232,83,101,0.05);">
+                                <h3
+                                    style="margin:0 0 18px 0; font-size:28px; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                                    Use Cases
+                                </h3>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-users" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Warehouse &amp; Inventory Managers</b>: Identify slow-moving, aging, or dead stock quickly to optimize warehouse space and reduce carrying costs.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-money" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Financial Controllers &amp; CFOs</b>: Reconcile balance sheet inventory valuation with true FIFO inventory layers and accurate aging buckets.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+                                    <i class="fa fa-tags" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Sales &amp; Clearance Teams</b>: Discover overstocked items to launch clearance sales or promotional discounts before stock depreciates.
+                                    </p>
+                                </div>
+                                <div style="display:flex; align-items:flex-start; gap:12px;">
+                                    <i class="fa fa-line-chart" style="font-size:18px; color:#e85365; margin-top:4px;"></i>
+                                    <p style="margin:0; font-size:15px; line-height:1.8; color:#666666;">
+                                        <b>Supply Chain Executives</b>: Gain comprehensive visibility into multi-warehouse inventory turnover and capital allocation.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXPLORE OTHER APPS -->
+                <section class="mb-5">
+                    <div class="text-center mb-4">
+                        <h2
+                            style="margin:0 0 10px 0; font-size:36px; line-height:1; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:2px; border-bottom:2.5px solid #43d5cf;">
+                                Explore
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:2px; border-bottom:2.5px solid #ffb733;">
+                                More
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; border-bottom:2.5px solid #f79ac0;">
+                                Odoo Apps
+                            </span>
+                        </h2>
+                        <p style="margin:0; font-size:16px; line-height:1.8; color:#666666;">
+                            Explore more powerful modules developed by Micra Digital to enhance your Odoo experience.
+                        </p>
+                    </div>
+                    <div class="row g-4">
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/18.0/odoo_ai"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="Odoo AI Bot" class="img-fluid w-100" src="odooai.png"
+                                        style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            Odoo AI Bot
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/19.0/pos_stripe_refund"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="POS Stripe Refund" class="img-fluid w-100" src="striperefund.png"
+                                        style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            POS Stripe Refund
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/19.0/pos_stocks_live"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="POS Stocks Management" class="img-fluid w-100" src="stocklive.png"
+                                        style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            POS Stocks Management
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/17.0/pos_stocks_expiry"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="POS Stocks Expiry" class="img-fluid w-100" src="stockexpiry.png"
+                                        style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            POS Stocks Expiry
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/19.0/machine_scheduling_advanced"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="Advanced Manufacturing Scheduling" class="img-fluid w-100"
+                                        src="machines.png" style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            Advanced Manufacturing Scheduling
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- APP -->
+                        <div class="col-md-6 col-lg-4">
+                            <a href="https://apps.odoo.com/apps/modules/18.0/Odoo_rest_api"
+                                style="display:block; text-decoration:none;">
+                                <div
+                                    style="height:100%; border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb;">
+                                    <img alt="Odoo Dynamic REST API" class="img-fluid w-100" src="odooapi.png"
+                                        style="border-bottom:1px solid #f2d6dc;">
+                                    <div style="padding:20px;">
+                                        <h4 style="margin:0; font-size:20px; font-weight:600; color:#1f1f1f;">
+                                            Odoo Dynamic REST API
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section class="mb-5">
+                    <div class="text-center mb-4">
+                        <h2
+                            style="margin:0 0 10px 0; font-size:36px; line-height:1; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:2px; border-bottom:2.5px solid #f79ac0;">
+                                Frequently
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:2px; border-bottom:2.5px solid #ffb733;">
+                                Asked
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; border-bottom:2.5px solid #43d5cf;">
+                                Questions
+                            </span>
+                        </h2>
+                        <p style="margin:0; font-size:16px; line-height:1.8; color:#666666;">
+                            Common questions buyers usually ask before installation.
+                        </p>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:18px; padding:20px; background-color:#fffafb; box-shadow:0 8px 22px rgba(232,83,101,0.04);">
+                                <h5 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                    How does this module calculate inventory aging?
+                                </h5>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    The module uses true FIFO (First-In, First-Out) valuation. It evaluates current on-hand stock
+                                    against historical incoming stock moves (from newest to oldest), calculating weighted unit
+                                    costs and allocating quantities across aging brackets based on move dates.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:18px; padding:20px; background-color:#fffafb; box-shadow:0 8px 22px rgba(232,83,101,0.04);">
+                                <h5 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                    Can I customize the aging period intervals?
+                                </h5>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    Yes! You can specify any period length (e.g. 15, 30, 45, 60, 90 days). The module automatically
+                                    computes 5 dynamic aging brackets (e.g., 0-30, 31-60, 61-90, 91-120, 121+ Days) and updates all
+                                    column headers across List, Pivot, PDF, and Excel reports.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:18px; padding:20px; background-color:#fffafb; box-shadow:0 8px 22px rgba(232,83,101,0.04);">
+                                <h5 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                    Can I filter stock by warehouses and specific internal locations?
+                                </h5>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    Yes, the wizard provides multi-warehouse and multi-location filters (including child locations)
+                                    as well as filtering by specific products or product categories.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:18px; padding:20px; background-color:#fffafb; box-shadow:0 8px 22px rgba(232,83,101,0.04);">
+                                <h5 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                    What export formats are supported?
+                                </h5>
+                                <p style="margin:0; font-size:15px; line-height:1.9; color:#666666;">
+                                    You can view interactive reports on-screen (List, Pivot, Graph), download executive Landscape QWeb PDF
+                                    reports with KPI summary cards, or export formatted Excel (.xlsx) spreadsheets with category subtotals and grand totals.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FINAL CTA -->
+                <section class="mt-5 mb-4"
+                    style="background:#ffffff; border:1px solid #e9e9e9; border-radius:24px; padding:40px 28px; box-shadow:0 10px 25px rgba(0,0,0,0.04);">
+                    <div class="container-fluid">
+                        <div class="row align-items-center g-4">
+                            <div class="col-lg-7">
+                                <div class="d-flex align-items-center flex-wrap mb-3" style="gap:14px;">
+                                    <img alt="Micra Digital Logo" src="logoo.png"
+                                        style="height:60px; width:60px; object-fit:contain; border-radius:14px;">
+                                    <span
+                                        style="font-size:13px; font-weight:600; color:#e85365; border:1px solid #f2d6dc; padding:6px 14px; border-radius:30px; background:#fff4f6;">
+                                        MICRA DIGITAL
+                                    </span>
+                                </div>
+                                <h2
+                                    style="margin:0 0 14px 0; font-size:36px; font-weight:700; color:#111111; font-family:'Kalam', cursive; line-height:1;">
+                                    <span
+                                        style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:3px solid #f79ac0;">
+                                        Ready
+                                    </span>
+                                    <span
+                                        style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:3px solid #43d5cf;">
+                                        to Use
+                                    </span>
+                                    <span
+                                        style="display:inline-block; padding:0 10px 7px 10px; border-bottom:3px solid #ffb733;">
+                                        This App?
+                                    </span>
+                                </h2>
+                                <p style="font-size:16px; line-height:1.9; color:#666666; margin:0 0 22px 0;">
+                                    Our team at <b>Micra Digital</b> builds practical Odoo solutions that improve
+                                    everyday business workflows. Contact us for installation support, customization, or
+                                    product guidance.
+                                </p>
+                                <div class="d-flex flex-wrap" style="gap:14px;">
+                                    <a href="mailto:hello@micra.digital"
+                                        style="background:#ffffff; color:#333333; padding:13px 24px; border-radius:30px; border:1px solid #e6e6e6; text-decoration:none; font-weight:600; display:inline-block;">
+                                        <i class="fa fa-envelope" style="margin-right:6px;"></i>
+                                        Contact Us
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div
+                                            style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center;">
+                                            <h5
+                                                style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                Company
+                                            </h5>
+                                            <p style="margin:0; color:#666666; font-size:15px;">Micra Digital</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div
+                                            style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center; height:100%;">
+                                            <h5
+                                                style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                Website
+                                            </h5>
+                                            <p style="margin:0; color:#666666; font-size:15px; word-break:break-word;">
+                                                www.micra.digital
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div
+                                            style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center; height:100%;">
+                                            <h5
+                                                style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                Email
+                                            </h5>
+                                            <p style="margin:0; color:#666666; font-size:13px; word-break:break-word;">
+                                                hello@micra.digital
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-top:18px; text-align:center; font-size:15px; color:#666666;">
+                                    Need help?
+                                    <a href="mailto:hello@micra.digital"
+                                        style="color:#e85365; text-decoration:none; font-weight:600;">
+                                        Contact our team
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SCREENSHOT TAB -->
+            <div aria-labelledby="screenshot-tab" class="tab-pane fade" id="screenshot-pane" role="tabpanel">
+                <!-- TITLE -->
+                <section class="mb-4">
+                    <div class="text-center">
+                        <h2
+                            style="margin:0 0 10px 0; font-size:36px; line-height:1; font-weight:700; color:#111111; font-family:'Kalam', cursive;">
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:3px; border-bottom:4px solid #ffba2f;">
+                                App
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; margin-right:3px; border-bottom:4px solid #43d5cf;">
+                                Screenshots
+                            </span>
+                            <span
+                                style="display:inline-block; padding:0 10px 7px 10px; border-bottom:3px solid #f79ac0;">
+                                Preview
+                            </span>
+                        </h2>
+                    </div>
+                </section>
+
+                <!-- SCREENSHOTS GRID -->
+                <div class="mb-5">
+                    <div class="row g-4">
+                        <!-- 1 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/1.png" alt="Menu Navigation"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        1. Menu Navigation
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Directly accessible under <b>Inventory &rarr; Reporting &rarr; Inventory Aging and Valuation Report</b> for seamless everyday reporting.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 2 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/2.png" alt="Report Configuration Wizard"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        2. Configuration Wizard
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Configure Aging Cut-off Date, custom Period Length (e.g. 30 Days), Company, Multi-Warehouse selection, and Internal Stock Locations.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 3 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/3.png" alt="Filter by Products"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        3. Filter by Specific Products
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Select single or multiple products to narrow down your inventory aging analysis to specific high-value or fast-changing items.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 4 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/4.png" alt="Filter by Product Categories"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        4. Filter by Product Categories
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Filter aging stock by category hierarchy to quickly analyze entire product lines and understand category-level stock depreciation.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 5 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/5.png" alt="Dynamic On-Screen List View"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        5. Dynamic On-Screen List View
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Interactive list view featuring 5 dynamic aging bracket columns (0-30, 31-60, 61-90, 91-120, 121+) with Price, Qty, and Value subtotals.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 6 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/6.png" alt="Batch Selection Actions"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        6. Interactive Batch Actions
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Select report records on screen to instantly refresh data calculations, trigger QWeb PDF generation, or export to formatted Excel.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 7 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/7.png" alt="Multi-Dimensional Pivot Analysis"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        7. Multi-Dimensional Pivot Analysis
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Powerful matrix analysis with expandable hierarchies across product categories, products, and dynamic aging price/qty/value metrics.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 8 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/8.png" alt="Executive Landscape PDF Report"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        8. Executive Landscape PDF Report
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        High-impact QWeb PDF report featuring executive KPI cards (Total Valuation, On-Hand Units, Items Analyzed) and category breakdown tables.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 9 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/9.png" alt="Formatted Excel Export"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        9. Formatted Excel (.xlsx) Export
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Professional Excel spreadsheet with branded styling, filter summary, category grouping, subtotal rows, and total stock valuations.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 10 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div
+                                style="border:1px solid #f2d6dc; border-radius:22px; overflow:hidden; background-color:#fffafb; box-shadow:0 10px 30px rgba(232,83,101,0.05); height:100%;">
+                                <img class="img-fluid w-100" src="ss/10.png" alt="Purchase Price & Growth Tracking"
+                                    style="background:#fff; padding:18px; border-bottom:1px solid #f2d6dc; height:230px; object-fit:contain; object-position:center;">
+                                <div style="padding:18px;">
+                                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:700; color:#1f1f1f;">
+                                        10. Purchase Price &amp; Growth Tracking
+                                    </h4>
+                                    <p style="margin:0; font-size:14px; line-height:1.7; color:#666666;">
+                                        Automatic Previous Price and Growth (%) tracking directly on Purchase Order lines to monitor vendor price changes and inflation trends.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FINAL CTA -->
+                    <section class="mt-5 mb-4"
+                        style="background:#ffffff; border:1px solid #e9e9e9; border-radius:24px; padding:40px 28px; box-shadow:0 10px 25px rgba(0,0,0,0.04);">
+                        <div class="container-fluid">
+                            <div class="row align-items-center g-4">
+                                <div class="col-lg-7">
+                                    <div class="d-flex align-items-center flex-wrap mb-3" style="gap:14px;">
+                                        <img alt="Micra Digital Logo" src="logoo.png"
+                                            style="height:60px; width:60px; object-fit:contain; border-radius:14px;">
+                                        <span
+                                            style="font-size:13px; font-weight:600; color:#e85365; border:1px solid #f2d6dc; padding:6px 14px; border-radius:30px; background:#fff4f6;">
+                                            MICRA DIGITAL
+                                        </span>
+                                    </div>
+                                    <h2
+                                        style="margin:0 0 14px 0; font-size:36px; font-weight:700; color:#111111; font-family:'Kalam', cursive; line-height:1;">
+                                        <span
+                                            style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:3px solid #f79ac0;">
+                                            Ready
+                                        </span>
+                                        <span
+                                            style="display:inline-block; padding:0 10px 7px 10px; margin-right:4px; border-bottom:3px solid #43d5cf;">
+                                            to Use
+                                        </span>
+                                        <span
+                                            style="display:inline-block; padding:0 10px 7px 10px; border-bottom:3px solid #ffb733;">
+                                            This App?
+                                        </span>
+                                    </h2>
+                                    <p style="font-size:16px; line-height:1.9; color:#666666; margin:0 0 22px 0;">
+                                        Our team at <b>Micra Digital</b> builds practical Odoo solutions that improve
+                                        everyday business workflows. Contact us for installation support, customization, or
+                                        product guidance.
+                                    </p>
+                                    <div class="d-flex flex-wrap" style="gap:14px;">
+                                        <a href="mailto:hello@micra.digital"
+                                            style="background:#ffffff; color:#333333; padding:13px 24px; border-radius:30px; border:1px solid #e6e6e6; text-decoration:none; font-weight:600; display:inline-block;">
+                                            <i class="fa fa-envelope" style="margin-right:6px;"></i>
+                                            Contact Us
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div
+                                                style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center;">
+                                                <h5
+                                                    style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                    Company
+                                                </h5>
+                                                <p style="margin:0; color:#666666; font-size:15px;">Micra Digital</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div
+                                                style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center; height:100%;">
+                                                <h5
+                                                    style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                    Website
+                                                </h5>
+                                                <p
+                                                    style="margin:0; color:#666666; font-size:15px; word-break:break-word;">
+                                                    www.micra.digital
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div
+                                                style="background:#fafafa; border:1px solid #eeeeee; border-radius:16px; padding:20px; text-align:center; height:100%;">
+                                                <h5
+                                                    style="font-size:18px; font-weight:700; margin:0 0 6px 0; color:#222222;">
+                                                    Email
+                                                </h5>
+                                                <p
+                                                    style="margin:0; color:#666666; font-size:13px; word-break:break-word;">
+                                                    hello@micra.digital
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:18px; text-align:center; font-size:15px; color:#666666;">
+                                        Need help?
+                                        <a href="mailto:hello@micra.digital"
+                                            style="color:#e85365; text-decoration:none; font-weight:600;">
+                                            Contact our team
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

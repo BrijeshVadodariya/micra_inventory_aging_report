@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_inventory_aging_report_wizard,inventory.aging.report.wizard,inventory.aging.report.wizard,base.group_user,crud,
+access_inventory_aging_report_line,inventory.aging.report.line,inventory.aging.report.line,base.group_user,crud,
+
