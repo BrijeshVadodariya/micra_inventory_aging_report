@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Purchase Order Form View to Add Previous Price and Growth -->
+        <record id="view_purchase_order_form_inherit_growth" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.growth</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Add after price_unit in Order Lines Tree View -->
+                <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="after">
+                    <field name="previous_price" 
+                           string="Previous Price" 
+                           readonly="1" 
+                           force_save="1"
+                           widget="monetary" 
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="growth" column_invisible="True" invisible="1"/>
+                    <field name="growth_display" 
+                           string="Growth (%)" 
+                           readonly="1" 
+                           force_save="1"
+                           decoration-danger="growth &gt; 0" 
+                           decoration-success="growth &lt; 0" 
+                           decoration-muted="growth == 0"
+                           class="fw-bold"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

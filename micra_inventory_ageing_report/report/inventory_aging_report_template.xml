@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper Format: Landscape for 16+ columns -->
+        <record id="paperformat_inventory_aging_report" model="report.paperformat">
+            <field name="name">Inventory Aging Report Landscape</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">8</field>
+            <field name="margin_right">8</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">8</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Report Action -->
+        <record id="action_report_inventory_aging" model="ir.actions.report">
+            <field name="name">Inventory Aging and Valuation Report</field>
+            <field name="model">inventory.aging.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">micra_inventory_ageing_report.report_inventory_aging_template</field>
+            <field name="report_file">micra_inventory_ageing_report.report_inventory_aging_template</field>
+            <field name="print_report_name">'Inventory Aging and Valuation Report - %s' % (object.aging_date)</field>
+            <field name="paperformat_id" ref="micra_inventory_ageing_report.paperformat_inventory_aging_report"/>
+        </record>
+
+        <!-- QWeb PDF Report Template -->
+        <template id="report_inventory_aging_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+
+                    <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 8.5px; color: #1E293B; line-height: 1.3;">
+
+                        <!-- Custom Scoped Styles for QWeb / wkhtmltopdf Print Rendering -->
+                        <style type="text/css">
+                            /* Layout Helpers (wkhtmltopdf table-based grid safety) */
+                            .layout-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                border-spacing: 0;
+                                table-layout: fixed;
+                            }
+                            
+                            /* Header Banner */
+                            .report-banner {
+                                width: 100%;
+                                background-color: #0F172A;
+                                color: #FFFFFF;
+                                border-radius: 5px;
+                                margin-bottom: 10px;
+                                border-collapse: collapse;
+                            }
+                            .report-banner td {
+                                padding: 10px 14px;
+                                vertical-align: middle;
+                            }
+                            .banner-title {
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: #FFFFFF;
+                                margin: 0;
+                                text-transform: uppercase;
+                                letter-spacing: 0.8px;
+                            }
+                            .banner-subtitle {
+                                font-size: 9px;
+                                color: #94A3B8;
+                                margin-top: 2px;
+                            }
+                            .banner-company {
+                                font-size: 12px;
+                                font-weight: 700;
+                                color: #FFFFFF;
+                                text-align: right;
+                            }
+                            .banner-meta {
+                                font-size: 8.5px;
+                                color: #94A3B8;
+                                text-align: right;
+                                margin-top: 2px;
+                            }
+
+                            /* KPI Executive Summary Cards */
+                            .kpi-table {
+                                width: 100%;
+                                border-collapse: separate;
+                                border-spacing: 8px 0;
+                                table-layout: fixed;
+                                margin-left: -8px;
+                                margin-right: -8px;
+                                margin-bottom: 10px;
+                            }
+                            .kpi-card {
+                                background-color: #F8FAFC;
+                                border: 1px solid #E2E8F0;
+                                border-top: 3px solid #3B82F6;
+                                border-radius: 4px;
+                                padding: 7px 10px;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+                            .kpi-card-danger {
+                                border-top: 3px solid #EF4444;
+                                background-color: #FEF2F2;
+                            }
+                            .kpi-card-dark {
+                                border-top: 3px solid #0F172A;
+                            }
+                            .kpi-label {
+                                font-size: 8px;
+                                font-weight: 700;
+                                color: #64748B;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                            }
+                            .kpi-value {
+                                font-size: 13px;
+                                font-weight: 700;
+                                color: #0F172A;
+                                margin-top: 2px;
+                            }
+                            .kpi-value-danger {
+                                color: #DC2626;
+                            }
+
+                            /* Filter Parameters Strip */
+                            .filter-strip {
+                                width: 100%;
+                                background-color: #F1F5F9;
+                                border: 1px solid #E2E8F0;
+                                border-left: 3.5px solid #2563EB;
+                                border-radius: 4px;
+                                margin-bottom: 10px;
+                                border-collapse: collapse;
+                            }
+                            .filter-strip td {
+                                padding: 5px 10px;
+                                font-size: 8.5px;
+                                vertical-align: middle;
+                            }
+                            .filter-label {
+                                font-weight: 700;
+                                color: #475569;
+                                margin-right: 3px;
+                            }
+                            .filter-val {
+                                color: #0F172A;
+                                font-weight: 600;
+                            }
+
+                            /* Main Data Table */
+                            .aging-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                table-layout: fixed;
+                                font-size: 8px;
+                                margin-top: 4px;
+                            }
+                            .aging-table thead {
+                                display: table-header-group;
+                            }
+                            .aging-table th, .aging-table td {
+                                padding: 3.5px 4px;
+                                border: 1px solid #CBD5E1;
+                                vertical-align: middle;
+                                word-wrap: break-word;
+                            }
+                            
+                            /* 2-Tier Header Styling */
+                            .th-tier1-items {
+                                background-color: #1E293B;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                text-align: center;
+                                font-size: 8.5px;
+                                letter-spacing: 0.3px;
+                            }
+                            .th-tier1-brackets {
+                                background-color: #334155;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                text-align: center;
+                                font-size: 8.5px;
+                                letter-spacing: 0.3px;
+                            }
+                            .th-tier1-totals {
+                                background-color: #0F172A;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                text-align: center;
+                                font-size: 8.5px;
+                                letter-spacing: 0.3px;
+                            }
+
+                            .th-tier2 {
+                                background-color: #475569;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                text-align: center;
+                                font-size: 7.5px;
+                                line-height: 1.1;
+                                padding: 4px 2px;
+                            }
+                            .th-tier2-total {
+                                background-color: #1E293B;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                text-align: center;
+                                font-size: 8px;
+                            }
+
+                            /* Category Grouping Rows */
+                            .cat-row {
+                                background-color: #F1F5F9;
+                                font-weight: 700;
+                                font-size: 9px;
+                                color: #0F172A;
+                                page-break-inside: avoid;
+                            }
+                            .cat-row td {
+                                border-left: 1px solid #2563EB;
+                                padding: 5px 8px !important;
+                            }
+                            .cat-badge {
+                                background-color: #E2E8F0;
+                                color: #334155;
+                                padding: 1px 5px;
+                                border-radius: 3px;
+                                font-size: 7.5px;
+                                font-weight: 600;
+                                margin-left: 5px;
+                            }
+
+                            /* Data Rows */
+                            .row-even { background-color: #FFFFFF; }
+                            .row-odd { background-color: #F8FAFC; }
+                            
+                            /* Aging Highlight Tints */
+                            .cell-aged-warn {
+                                background-color: #FFFBEB;
+                                color: #B45309;
+                                font-weight: 600;
+                            }
+                            .cell-aged-crit {
+                                background-color: #FEF2F2;
+                                color: #B91C1C;
+                                font-weight: 700;
+                            }
+                            .text-muted-zero {
+                                color: #94A3B8;
+                            }
+
+                            /* Subtotals and Grand Totals */
+                            .cat-subtotal {
+                                background-color: #F8FAFC;
+                                font-weight: 700;
+                                font-size: 8px;
+                                color: #1E293B;
+                                border-top: 1.5px solid #94A3B8 !important;
+                                border-bottom: 1.5px solid #CBD5E1 !important;
+                                page-break-inside: avoid;
+                            }
+                            .grand-total {
+                                background-color: #0F172A;
+                                color: #FFFFFF;
+                                font-weight: 700;
+                                font-size: 8.5px;
+                                border-top: 2px solid #0F172A !important;
+                            }
+                            .grand-total td {
+                                border-color: #334155 !important;
+                                padding: 5px 4px !important;
+                            }
+
+                            .text-end { text-align: right; }
+                            .text-center { text-align: center; }
+                            .text-start { text-align: left; }
+                        </style>
+
+                        <!-- 1. Report Header Banner (wkhtmltopdf safe table) -->
+                        <table class="report-banner">
+                            <tr>
+                                <td style="width: 60%;">
+                                    <div class="banner-title">Inventory Aging and Valuation Report</div>
+                                    <div class="banner-subtitle">FIFO valuation analysis across aging brackets</div>
+                                </td>
+                                <td style="width: 40%; text-align: right;">
+                                    <div class="banner-company" t-esc="doc.company_id.name"/>
+                                    <div class="banner-meta">Printed: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/> | Currency: <span t-esc="doc.company_id.currency_id.name or 'USD'"/></div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <t t-set="report_res" t-value="doc._get_aging_data_grouped()"/>
+                        <t t-set="brackets" t-value="report_res['brackets']"/>
+                        <t t-set="grouped" t-value="report_res['grouped']"/>
+                        <t t-set="grand_total" t-value="report_res['grand_total']"/>
+                        <t t-set="curr" t-value="doc.company_id.currency_id.symbol or ''"/>
+                        <t t-set="total_analyzed_products" t-value="sum(len(grouped[c]['lines']) for c in grouped)"/>
+                        <t t-set="critical_aged_val" t-value="grand_total['bracket_4_val'] + grand_total['bracket_5_val']"/>
+
+                        <!-- 2. KPI Executive Summary Cards (wkhtmltopdf 4-column safe table) -->
+                        <table class="kpi-table">
+                            <tr>
+                                <td style="width: 34%;">
+                                    <div class="kpi-card kpi-card-dark">
+                                        <div class="kpi-label">Total Stock Valuation</div>
+                                        <div class="kpi-value"><t t-esc="curr"/> <span t-esc="'{:,.2f}'.format(grand_total['total_val'])"/></div>
+                                    </div>
+                                </td>
+                                <td style="width: 33%;">
+                                    <div class="kpi-card">
+                                        <div class="kpi-label">Total On-Hand Quantity</div>
+                                        <div class="kpi-value"><span t-esc="'{:,.2f}'.format(grand_total['total_qty'])"/> Units</div>
+                                    </div>
+                                </td>
+                                <td style="width: 33%;">
+                                    <div class="kpi-card">
+                                        <div class="kpi-label">Products Analyzed</div>
+                                        <div class="kpi-value"><span t-esc="total_analyzed_products"/> Items (<t t-esc="len(grouped)"/> Categories)</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 3. Filter Parameters Strip (wkhtmltopdf safe table) -->
+                        <table class="filter-strip">
+                            <tr>
+                                <td style="width: 25%;">
+                                    <span class="filter-label">Aging As Of:</span>
+                                    <span class="filter-val" t-esc="doc.aging_date"/>
+                                </td>
+                                <td style="width: 25%;">
+                                    <span class="filter-label">Bucket Step:</span>
+                                    <span class="filter-val"><t t-esc="doc.period_length"/> Days per Bracket</span>
+                                </td>
+                                <td style="width: 25%;">
+                                    <span class="filter-label">Warehouse:</span>
+                                    <span class="filter-val">
+                                        <t t-if="doc.warehouse_ids">
+                                            <t t-esc="', '.join(doc.warehouse_ids.mapped('name'))"/>
+                                        </t>
+                                        <t t-else="">All Warehouses</t>
+                                    </span>
+                                </td>
+                                <td style="width: 25%;">
+                                    <span class="filter-label">Filter Scope:</span>
+                                    <span class="filter-val">
+                                        <t t-if="doc.filter_by == 'product' and doc.product_ids">
+                                            <t t-esc="', '.join(doc.product_ids.mapped('name'))"/>
+                                        </t>
+                                        <t t-elif="doc.filter_by == 'category' and doc.category_ids">
+                                            <t t-esc="', '.join(doc.category_ids.mapped('name'))"/>
+                                        </t>
+                                        <t t-else="">All Products</t>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 4. Main Inventory Aging Breakdown Table -->
+                        <table class="aging-table">
+                            <thead>
+                                <!-- Tier 1 Header: Functional Groups -->
+                                <tr>
+                                    <th colspan="4" class="th-tier1-items">Product &amp; Location Details</th>
+                                    <th colspan="2" class="th-tier1-totals">Total On-Hand Stock</th>
+                                    <th colspan="15" class="th-tier1-brackets">Aging Buckets Breakdown (Price, Quantity &amp; Value)</th>
+                                </tr>
+                                <!-- Tier 2 Header: Columns -->
+                                <tr>
+                                    <th style="width: 5.5%;" class="th-tier2">Ref</th>
+                                    <th style="width: 13.5%;" class="th-tier2">Product Name</th>
+                                    <th style="width: 6.5%;" class="th-tier2">Warehouse</th>
+                                    <th style="width: 4.5%;" class="th-tier2">Unit Cost</th>
+
+                                    <!-- Totals -->
+                                    <th style="width: 5.5%;" class="th-tier2-total">Total On-Hand Qty</th>
+                                    <th style="width: 6.5%;" class="th-tier2-total">Total Value</th>
+
+                                    <!-- Bracket 1 -->
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b1']"/><br/>Price</th>
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b1']"/><br/>Qty</th>
+                                    <th style="width: 4.8%;" class="th-tier2"><span t-esc="brackets['b1']"/><br/>Value</th>
+
+                                    <!-- Bracket 2 -->
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b2']"/><br/>Price</th>
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b2']"/><br/>Qty</th>
+                                    <th style="width: 4.8%;" class="th-tier2"><span t-esc="brackets['b2']"/><br/>Value</th>
+
+                                    <!-- Bracket 3 -->
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b3']"/><br/>Price</th>
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b3']"/><br/>Qty</th>
+                                    <th style="width: 4.8%;" class="th-tier2"><span t-esc="brackets['b3']"/><br/>Value</th>
+
+                                    <!-- Bracket 4 -->
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b4']"/><br/>Price</th>
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b4']"/><br/>Qty</th>
+                                    <th style="width: 4.8%;" class="th-tier2"><span t-esc="brackets['b4']"/><br/>Value</th>
+
+                                    <!-- Bracket 5 -->
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b5']"/><br/>Price</th>
+                                    <th style="width: 3.8%;" class="th-tier2"><span t-esc="brackets['b5']"/><br/>Qty</th>
+                                    <th style="width: 4.8%;" class="th-tier2"><span t-esc="brackets['b5']"/><br/>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="grouped" t-as="categ_name">
+                                    <t t-set="cat_data" t-value="grouped[categ_name]"/>
+                                    <!-- Category Section Row -->
+                                    <tr class="cat-row">
+                                        <td colspan="21">
+                                            <strong><span t-esc="categ_name"/></strong>
+                                            <span class="cat-badge"><t t-esc="len(cat_data['lines'])"/> items</span>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Item Detail Rows -->
+                                    <t t-foreach="cat_data['lines']" t-as="l">
+                                        <tr t-att-class="'row-even' if l_index % 2 == 0 else 'row-odd'">
+                                            <td class="text-start"><span t-esc="l['default_code'] or '-'"/></td>
+                                            <td class="text-start"><strong><span t-esc="l['product_name']"/></strong></td>
+                                            <td class="text-start"><span t-esc="l['warehouse_name']"/></td>
+                                            <td class="text-end"><span t-esc="'{:,.2f}'.format(l['unit_cost'])"/></td>
+
+                                            <!-- Totals -->
+                                            <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(l['total_qty'])"/></strong></td>
+                                            <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(l['total_val'])"/></strong></td>
+
+                                            <!-- Bracket 1 -->
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_1_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_1_price'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_1_qty'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_1_qty'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_1_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_1_val'])"/>
+                                            </td>
+
+                                            <!-- Bracket 2 -->
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_2_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_2_price'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_2_qty'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_2_qty'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_2_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_2_val'])"/>
+                                            </td>
+
+                                            <!-- Bracket 3 -->
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_3_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_3_price'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_3_qty'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_3_qty'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_3_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_3_val'])"/>
+                                            </td>
+
+                                            <!-- Bracket 4 -->
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_4_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_4_price'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_4_qty'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_4_qty'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_4_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_4_val'])"/>
+                                            </td>
+
+                                            <!-- Bracket 5 -->
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_5_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_5_price'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_5_qty'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_5_qty'])"/>
+                                            </td>
+                                            <td class="text-end" t-att-class="'text-muted-zero' if l['bracket_5_val'] == 0 else ''">
+                                                <span t-esc="'{:,.2f}'.format(l['bracket_5_val'])"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Category Subtotal Row -->
+                                    <t t-set="cat_tot" t-value="cat_data['total']"/>
+                                    <tr class="cat-subtotal">
+                                        <td colspan="4" class="text-start">
+                                            <strong>Subtotal - <span t-esc="categ_name"/></strong>
+                                        </td>
+                                        <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(cat_tot['total_qty'])"/></strong></td>
+                                        <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(cat_tot['total_val'])"/></strong></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_1_price'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_1_qty'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_1_val'])"/></td>
+
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_2_price'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_2_qty'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_2_val'])"/></td>
+
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_3_price'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_3_qty'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_3_val'])"/></td>
+
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_4_price'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_4_qty'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_4_val'])"/></td>
+
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_5_price'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_5_qty'])"/></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(cat_tot['bracket_5_val'])"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <!-- Grand Total Row -->
+                                <tr class="grand-total">
+                                    <td colspan="4" class="text-start">
+                                        <strong>GRAND TOTAL</strong>
+                                    </td>
+                                    <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(grand_total['total_qty'])"/></strong></td>
+                                    <td class="text-end"><strong><span t-esc="'{:,.2f}'.format(grand_total['total_val'])"/></strong></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_1_price'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_1_qty'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_1_val'])"/></td>
+
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_2_price'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_2_qty'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_2_val'])"/></td>
+
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_3_price'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_3_qty'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_3_val'])"/></td>
+
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_4_price'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_4_qty'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_4_val'])"/></td>
+
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_5_price'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_5_qty'])"/></td>
+                                    <td class="text-end"><span t-esc="'{:,.2f}'.format(grand_total['bracket_5_val'])"/></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
